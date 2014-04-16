@@ -46,12 +46,13 @@ public class MainProgramFrame extends JFrame {
 	DefaultListModel listModel;
 	ArrayList<CustomKey> keys = new ArrayList<CustomKey>();
 	ArrayList<String> keyNames = new ArrayList<String>();
+	static MainProgramFrame frame;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MainProgramFrame frame = new MainProgramFrame();
+					frame = new MainProgramFrame();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -99,7 +100,7 @@ public class MainProgramFrame extends JFrame {
 		documentButtonPanel.add(encryptButton);
 		
 		JButton decryptButton = new JButton("Decrypt");
-		decryptButton.addActionListener(new DecryptListener());
+		//encryptButton.addActionListener(new openDecryptFrameListener());
 		documentButtonPanel.add(decryptButton);
 		
 		//New Custom Key panel components		
@@ -220,22 +221,6 @@ public class MainProgramFrame extends JFrame {
 		this.setJMenuBar(menuBar);	
 	}
 	
-	public String encryptCeasarCipher(String string, int c) {
-		String[] words = string.split(" ");
-		String encryptedString = "";
-		for (int k = 0; k < words.length; k++) {
-			char[] chars = words[k].toCharArray();		
-			for (int i = 0; i < chars.length; i++) {	
-				char ch = chars[i];
-				int start = (int)ch;
-				int end = start + c;							
-				char newCh = (char)end;
-				encryptedString += newCh;	
-			}
-			encryptedString += " ";
-		}
-		return encryptedString;
-	}
 	
 	public String decryptCeasarCipher(String string, int c) {
 		String[] words = string.split(" ");
@@ -252,13 +237,6 @@ public class MainProgramFrame extends JFrame {
 			decryptedString += " ";
 		}
 		return decryptedString;
-	}
-		
-	
-	private class EncryptListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			textArea.setText(encryptCeasarCipher(textArea.getText(), 5));
-		}
 	}
 	
 	private class DecryptListener implements ActionListener {
@@ -298,8 +276,15 @@ public class MainProgramFrame extends JFrame {
 	
 	private class openEncryptFrameListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-				EncryptFrame encryptFrame = new EncryptFrame(keys);
+				EncryptFrame encryptFrame = new EncryptFrame(keys, frame);
 				encryptFrame.setVisible(true);
+			}
+		}
+	
+	private class openDecryptFrameListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+				DecryptFrame decryptFrame = new DecryptFrame(keys, frame);
+				decryptFrame.setVisible(true);
 			}
 		}
 	
@@ -319,5 +304,13 @@ public class MainProgramFrame extends JFrame {
 		for (String s: keyNames) {
 			listModel.addElement(s.toString());
 		}
+	}
+	
+	public void setTextArea(String text) {
+		textArea.setText(text);
+	}
+	
+	public String getTextArea() {
+		return textArea.getText();
 	}
 }

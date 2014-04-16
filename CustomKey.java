@@ -18,5 +18,13 @@ public class CustomKey {
 	public String toString() {
 		return type + ", " + name + ", " + extra;
 	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public int getExtra() {
+		return extra;
+	}
 
 }
